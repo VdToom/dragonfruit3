@@ -1,0 +1,204 @@
+<xs:schema targetNamespace="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:i="http://moten.david.org/xsd-forms">
+	<!-- https://xsd-forms.herokuapp.com/ -->
+	<xs:annotation i:numberItems="true">
+		<xs:appinfo>
+			<i:header>
+				<![CDATA[
+<h2>Stuur EFactuur</h2>
+]]></i:header>
+			<i:footer>
+				<![CDATA[
+    <p>Thanks for your time.</p>
+]]></i:footer>
+			<i:extraImports>
+				<![CDATA[
+<!-- extra imports would go here -->
+<xsd:import namespace="urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2"
+               schemaLocation="UBL-CommonBasicComponents-2.1.xsd"/>
+]]></i:extraImports>
+			<i:extraScript>
+				<![CDATA[
+// extra script would go here
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+today = yyyy + '-' + mm + '-' + dd;
+
+$('#item-enclosing-1-instance-1').css("background", "#f4faf8");
+
+$('#item-6-instance-1_1').css("background", "aqua");
+$('#item-2-instance-1_1').val("2.1");
+$('#item-3-instance-1_1').val("urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0");
+$('#item-4-instance-1_1').val("urn:fdc:peppol.eu:2017:poacc:billing:01:1.0");
+$('#item-6-instance-1_1').val(today);
+$('#item-7-instance-1_1').val("380");
+$('#item-9-instance-1_1').val("EUR");
+
+$('#item-28-instance-1_1_1_1_1_1').val("VAT");
+
+
+]]></i:extraScript>
+		</xs:appinfo>
+	</xs:annotation>
+	<xs:element name="Invoice" type="InvoiceType"/>
+	<xs:complexType name="InvoiceType">
+		<xs:sequence>
+			<xs:element name="cbc:UBLVersionID" type="xs:double" value="2.1">
+				<xs:annotation i:visible="true" i:width="5em"/>
+			</xs:element>
+			<xs:element name="cbc:CustomizationID" type="xs:string">
+				<xs:annotation i:visible="true" i:width="35em"/>
+			</xs:element>
+			<xs:element name="cbc:ProfileID" type="xs:string">
+				<xs:annotation i:visible="true" i:width="35em"/>
+			</xs:element>
+			<xs:element name="cbc:ID" type="xs:string" minOccurs="1" maxLength="25">
+				<xs:annotation i:width="15em" i:label="FactuurNummer"/>
+			</xs:element>
+			<xs:element name="cbc:IssueDate" type="xs:date">
+				<xs:annotation i:width="15em" i:label="FactuurDatum"/>
+			</xs:element>
+			<!-- <xs:element name="cbc:DueDate" type="xs:date"/> -->
+			<!-- <xs:element name="cbc:InvoiceTypeCode" type="InvoiceTypeCodeChoice"/> -->
+			<xs:element name="cbc:InvoiceTypeCode" type="InvoiceTypeCodeType">
+				<xs:annotation i:addBlank="true" i:validation="380 = Invoice; 384 = Credit Invoice" i:before="Selecteer je type factuur" i:after="Selecteer 380 voor een normale factuur en 384 voor een Credit Factuur"/>
+			</xs:element>
+			<xs:element name="cbc:Note" type="xs:string">
+				<xs:annotation i:text="textarea"/>
+			</xs:element>
+			<xs:element name="cbc:DocumentCurrencyCode" type="xs:string"/>
+			<xs:element name="cbc:BuyerReference" type="xs:string"/>
+			<!-- <xs:element name="cac:InvoicePeriod" type="InvoicePeriodType"> -->
+			<!-- <xs:annotation i:visible="false" i:label="Invoice Period"/> -->
+			<!-- </xs:element> -->
+			<xs:element name="cac:OrderReference" type="OrderReferenceType"/>
+			<xs:element name="cac:AccountingSupplierParty" type="SupplierPartyType">
+				<xs:annotation i:label="AccountingSupplierParty"/>
+			</xs:element>
+			<xs:element name="cac:AccountingCustomerParty" type="SupplierPartyType">
+				<xs:annotation i:label="AccountingCustomerParty"/>
+			</xs:element>
+			<!-- <xs:complexType name="cac:AccountingSupplierParty" type="SupplierParty"> -->
+			<!-- </xs:complexType> -->
+			<!-- <xs:element name="cac:AccountingCustomerParty"> -->
+			<!-- <xs:element name="cac:Party" type="PartyType"/> -->
+			<!-- </xs:element> -->
+			<!-- <xs:element name="cac:TaxRepresentativeParty"> -->
+			<!-- <xs:element name="cac:Party" type="PartyType"/> -->
+			<!-- </xs:element> -->
+			<!-- <xs:element name="cac:Delivery"/> -->
+			<!-- <xs:element name="cac:PaymentMeans"/> -->
+			<!-- <xs:element name="cac:PaymentTerms"/> -->
+			<!-- <xs:element name="cac:TaxTotal"/> -->
+			<!-- <xs:element name="cac:LegalMonetaryTotal"/> -->
+			<!-- <xs:element name="cac:InvoiceLine"/> -->
+		</xs:sequence>
+	</xs:complexType>
+	<!-- EINDE INVOICE TYPE -->
+	<!-- xxx -->
+	<xs:complexType name="SupplierPartyType">
+		<xs:sequence>
+			<xs:element name="cac:Party" type="PartyType">
+				<xs:annotation i:addBlank="true" i:title="SupplierParty"/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- xxx -->
+	<xs:complexType name="PartyType">
+		<xs:sequence>
+			<xs:element name="cbc:EndpointID" type="xs:string">
+				<xs:annotation i:addBlank="true" i:title="EndpointID"/>
+			</xs:element>
+			<!-- <xs:element name="cac:PartyIdentification" type="IDType"> -->
+				<!-- <xs:annotation i:label="Vestigingsgegevens"/> -->
+			<!-- </xs:element> -->
+			<xs:element name="cac:PostalAddress" type="PostalAddressType">
+				<xs:annotation i:addBlank="true" i:label="Post Addres"/>
+			</xs:element>
+			<xs:element name="cac:PartyTaxScheme" type="PartyTaxSchemeType">
+				<!-- <xs:annotation i:addBlank="true" i:label="PostalAddressType"/> --></xs:element>
+			<xs:element name="cac:PartyLegalEntity" type="PartyLegalEntityType">
+				<!-- <xs:annotation i:addBlank="true" i:label="PostalAddressType"/> --></xs:element>
+			<xs:element name="cac:Contact" type="xs:string">
+				<!-- <xs:annotation i:addBlank="true" i:label="PostalAddressType"/> --></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- xxx -->
+	<xs:complexType name="IDType">
+		<xs:sequence>
+			<xs:element name="cbc:ID" type="xs:string">
+				<xs:annotation i:addBlank="true" i:label="ID"/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- xxx -->
+	<!-- xxx -->
+	<xs:complexType name="PostalAddressType">
+		<xs:sequence>
+			<xs:element name="cbc:StreetName" type="xs:string"/>
+			<xs:element name="cbc:CityName" type="xs:string"/>
+			<xs:element name="cbc:PostalZone" type="xs:string"/>
+			<xs:element name="cac:Country" type="CountryType">
+				<!-- <xs:annotation i:label="Country"/> --></xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<!-- </xs:complexType> -->
+	<xs:complexType name="CountryType">
+		<xs:sequence>
+			<xs:element name="cbc:IdentificationCode" type="xs:string">
+				<!-- <xs:annotation i:title="land"/> -->
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyTaxSchemeType">
+		<xs:sequence>
+			<xs:element name="cbc:CompanyID" type="xs:string">
+				<xs:annotation i:label="BTW-Nummer"/>
+			</xs:element>
+			<xs:element name="cac:TaxScheme" type="IDType">
+				<xs:annotation i:visible="false"/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PartyLegalEntityType">
+		<xs:sequence>
+			<xs:element name="cbc:RegistrationName" type="xs:string">
+				<xs:annotation i:label="KVK handelsnaam"/>
+			</xs:element>
+			<xs:element name="cbc:CompanyID" type="xs:string">
+				<xs:annotation i:label="KVK nummer"/>
+			</xs:element>
+			<xs:element name="cac:RegistrationAddress" type="PostalAddressType">
+				<xs:annotation i:addBlank="true" i:label="KVK vestigings Addres"/>
+				</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OrderReferenceType">
+		<xs:sequence>
+			<xs:element name="cbc:ID" type="xs:string" minOccurs="1">
+				<xs:annotation i:title="Order Referentie" i:description="Vul hier het van de klant verkregen Inkoopordernummer"/>
+			</xs:element>
+			<xs:element name="cbc:SaleOrderID" type="xs:string" minOccurs="0">
+				<xs:annotation i:visible="false"/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InvoicePeriodType">
+		<xs:sequence>
+			<xs:element name="cbc:StartDate" type="xs:date" minOccurs="0"/>
+			<xs:element name="cbc:EndDate" type="xs:date" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="InvoiceTypeCodeType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="380"/>
+			<xs:enumeration value="384"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="always-true">
+		<xs:restriction base="boolean">
+			<xs:enumeration value="true"/>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>
